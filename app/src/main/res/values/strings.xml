@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VideoEcraft</string>
+    <string name="app_tagline">Editor de video sin marcas de agua</string>
+
+    <!-- Home -->
+    <string name="home_title">Mis proyectos</string>
+    <string name="home_new_project">Nuevo proyecto</string>
+    <string name="home_drafts">Borradores recientes</string>
+    <string name="home_empty_title">Aún no hay proyectos</string>
+    <string name="home_empty_body">Toca «Nuevo proyecto» para importar tus videos y empezar a editar.</string>
+
+    <!-- Editor -->
+    <string name="editor_title">Editor</string>
+    <string name="editor_tool_trim">Recortar</string>
+    <string name="editor_tool_transitions">Transiciones</string>
+    <string name="editor_tool_chroma">Croma</string>
+    <string name="editor_tool_speed">Velocidad</string>
+    <string name="editor_tool_audio">Audio</string>
+    <string name="editor_tool_text">Texto</string>
+    <string name="editor_tool_filters">Filtros</string>
+    <string name="editor_tool_canvas">Fondo</string>
+
+    <!-- Exportación -->
+    <string name="export_title">Exportar</string>
+    <string name="export_resolution">Resolución</string>
+    <string name="export_fps">Fotogramas por segundo</string>
+    <string name="export_bitrate">Calidad (bitrate)</string>
+    <string name="export_start">Exportar video</string>
+    <string name="export_notification_channel">Exportaciones de video</string>
+</resources>

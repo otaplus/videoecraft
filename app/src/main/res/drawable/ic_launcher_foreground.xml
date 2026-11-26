@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ============================================================
+    VideoEcraft — Icono adaptativo · Capa de PRIMER PLANO
+    ============================================================
+    Concepto: BLOQUE GEOMÉTRICO "craft" (cubo isométrico) fusionado
+    con un TRIÁNGULO DE PLAY y una CINTA/FOTOGRAMA de cine.
+
+      · Lienzo 108 x 108 dp · zona segura ≈ (30..78) en ambos ejes.
+      · El cubo ocupa (26..82) x (26..84); el play queda centrado.
+      · La cinta de cine cruza la base del cubo.
+
+    Orden de dibujo (atrás → adelante):
+      1. Sombra isométrica proyectada.
+      2. Cara derecha  (naranja neón oscuro).
+      3. Cara izquierda(naranja neón).
+      4. Cara superior (coral claro, luz cenital).
+      5. Detalle: studs tipo LEGO en la cara superior.
+      6. Triángulo de PLAY en negativo + play sólido.
+      7. Cinta de cine con perforaciones.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- ============ 0. RETÍCULA DE MEDIDA (guía, no visible) ============ -->
+    <!-- Vértices del cubo isométrico:
+           Superior  S = (54, 26)
+           Izquierda I = (26, 42)
+           Derecha   D = (82, 42)
+           Frente    F = (54, 58)
+           Inf-Izq   A = (26, 68)
+           Inf-Der   B = (82, 68)
+           Base      C = (54, 84)                                     -->
+
+    <!-- ============ 1. SOMBRA PROYECTADA ============ -->
+    <path
+        android:fillAlpha="0.45"
+        android:fillColor="#000000"
+        android:pathData="M26,68 L54,84 L82,68 L82,72 L54,88 L26,72 Z" />
+
+    <!-- ============ 2. CARA DERECHA ============ -->
+    <path android:pathData="M54,58 L82,42 L82,68 L54,84 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="82"
+                android:endY="84"
+                android:startX="54"
+                android:startY="42"
+                android:type="linear">
+                <item
+                    android:color="#FFD84315"
+                    android:offset="0.0" />
+                <item
+                    android:color="#FFA93208"
+                    android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- ============ 3. CARA IZQUIERDA ============ -->
+    <path android:pathData="M54,58 L26,42 L26,68 L54,84 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="26"
+                android:endY="84"
+                android:startX="54"
+                android:startY="42"
+                android:type="linear">
+                <item
+                    android:color="#FFFF5722"
+                    android:offset="0.0" />
+                <item
+                    android:color="#FFD84315"
+                    android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- ============ 4. CARA SUPERIOR (luz cenital) ============ -->
+    <path android:pathData="M54,26 L82,42 L54,58 L26,42 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="54"
+                android:endY="58"
+                android:startX="54"
+                android:startY="26"
+                android:type="linear">
+                <item
+                    android:color="#FFFFB099"
+                    android:offset="0.0" />
+                <item
+                    android:color="#FFFF8A65"
+                    android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Arista superior frontal (separación de caras) -->
+    <path
+        android:fillAlpha="0.35"
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M54,58 L82,42 L82,43.6 L54,59.6 Z" />
+
+    <!-- ============ 5. STUDS TIPO LEGO EN LA CARA SUPERIOR ============ -->
+    <!-- Stud izquierdo -->
+    <path
+        android:fillAlpha="0.22"
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M40,38.6 L47,42.8 L40,47 L33,42.8 Z" />
+    <!-- Stud derecho -->
+    <path
+        android:fillAlpha="0.22"
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M68,38.6 L75,42.8 L68,47 L61,42.8 Z" />
+    <!-- Stud frontal / central -->
+    <path
+        android:fillAlpha="0.30"
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M54,45.4 L61,49.6 L54,53.8 L47,49.6 Z" />
+    <path
+        android:fillAlpha="0.16"
+        android:fillColor="#FF000000"
+        android:pathData="M47,49.6 L54,53.8 L61,49.6 L61,51.2 L54,55.4 L47,51.2 Z" />
+
+    <!-- ============ 6. TRIÁNGULO DE PLAY ============ -->
+    <!-- Hueco/negativo sobre la cara izquierda -->
+    <path
+        android:fillAlpha="0.40"
+        android:fillColor="#FF101014"
+        android:pathData="M31,52.4 L44.5,60.2 L44.5,75.4 L31,67.6 Z" />
+    <!-- Play sólido principal -->
+    <path android:pathData="M57.4,50 L73.6,59.4 L57.4,68.8 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="73.6"
+                android:endY="68.8"
+                android:startX="57.4"
+                android:startY="50"
+                android:type="linear">
+                <item
+                    android:color="#FFFFFFFF"
+                    android:offset="0.0" />
+                <item
+                    android:color="#FFFFF3EE"
+                    android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- Brillo interior del play -->
+    <path
+        android:fillAlpha="0.55"
+        android:fillColor="#FFFF5722"
+        android:pathData="M60,53.6 L69,59 L60,64.4 Z" />
+    <path
+        android:fillAlpha="0.9"
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M57.4,50 L73.6,59.4 L71.4,60.6 L57.4,52.4 Z" />
+
+    <!-- ============ 7. CINTA / FOTOGRAMA DE CINE ============ -->
+    <!-- Sombra de la cinta -->
+    <path
+        android:fillAlpha="0.40"
+        android:fillColor="#FF000000"
+        android:pathData="M14,73.4 L22,68.9 L94,76.4 L86,80.9 Z" />
+    <!-- Cuerpo de la cinta -->
+    <path android:pathData="M14,70.6 L22,66.1 L94,73.6 L86,78.1 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="94"
+                android:endY="73.6"
+                android:startX="14"
+                android:startY="73.6"
+                android:type="linear">
+                <item
+                    android:color="#FFFF8A65"
+                    android:offset="0.0" />
+                <item
+                    android:color="#FFFF5722"
+                    android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Perforaciones de la cinta (color del fondo) -->
+    <path
+        android:fillColor="#101014"
+        android:pathData="M17.0,71.9 L20.2,71.4 L19.8,73.9 L16.6,74.4 Z
+            M26.4,71.0 L29.6,70.5 L29.2,73.0 L26.0,73.5 Z
+            M35.8,70.1 L39.0,69.6 L38.6,72.1 L35.4,72.6 Z
+            M45.2,69.2 L48.4,68.7 L48.0,71.2 L44.8,71.7 Z
+            M54.6,68.3 L57.8,67.8 L57.4,70.3 L54.2,70.8 Z
+            M64.0,67.4 L67.2,66.9 L66.8,69.4 L63.6,69.9 Z
+            M73.4,66.5 L76.6,66.0 L76.2,68.5 L73.0,69.0 Z
+            M82.8,65.6 L86.0,65.1 L85.6,67.6 L82.4,68.1 Z" />
+
+</vector>

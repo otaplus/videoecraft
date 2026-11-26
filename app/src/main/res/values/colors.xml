@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ================================================================ -->
+    <!--  Paleta "Craft" — modo oscuro profundo + acentos naranja coral   -->
+    <!-- ================================================================ -->
+
+    <!-- Superficies -->
+    <color name="craft_void">#FF101014</color>
+    <color name="craft_surface">#FF1C1C24</color>
+    <color name="craft_surface_high">#FF262630</color>
+    <color name="craft_outline">#FF32323E</color>
+
+    <!-- Acentos (degradado Naranja Neón → Coral) -->
+    <color name="craft_accent_start">#FFFF5722</color>
+    <color name="craft_accent_end">#FFFF8A65</color>
+    <color name="craft_accent_mid">#FFFF7043</color>
+
+    <!-- Texto -->
+    <color name="craft_text_primary">#FFF5F5F7</color>
+    <color name="craft_text_secondary">#FF9A9AA8</color>
+
+    <!-- Semánticos -->
+    <color name="craft_error">#FFFF5370</color>
+    <color name="craft_success">#FF3DDC97</color>
+
+    <!-- Icono adaptativo -->
+    <color name="ic_launcher_background">#FF101014</color>
+
+    <!-- Compatibilidad -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

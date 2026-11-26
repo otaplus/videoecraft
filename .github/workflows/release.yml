@@ -1,0 +1,202 @@
+name: Release
+
+# Se dispara al empujar un tag de versión:  v1.0.0, v1.2.3, v2.0.0-rc1
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  # Permite lanzarlo a mano desde la pestaña Actions (útil para re-publicar
+  # una release si algo falló a mitad).
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag a publicar (ej. v1.0.0)'
+        required: true
+        type: string
+
+# Necesario para crear la Release y subir el APK.
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build & Publish APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determinar versión
+        id: version
+        run: |
+          # En push de tag, el tag está en GITHUB_REF_NAME.
+          # En workflow_dispatch, viene del input.
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ inputs.tag }}"
+          else
+            TAG="${GITHUB_REF_NAME}"
+          fi
+
+          # El tag debe empezar por "v". Se valida aquí para fallar rápido.
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+.*$ ]]; then
+            echo "::error::El tag '$TAG' no cumple el formato vX.Y.Z"
+            exit 1
+          fi
+
+          # versionName sin la "v" inicial.
+          VERSION_NAME="${TAG#v}"
+
+          # versionCode: se calcula a partir de los componentes semver de forma
+          # monotónica (1.2.3 -> 10203). Android exige que cada release tenga un
+          # versionCode mayor que el anterior, y con este esquema el orden es
+          # estable sin mantener un contador a mano.
+          CORE="${VERSION_NAME%%-*}"
+          MAJOR=$(echo "$CORE" | cut -d. -f1)
+          MINOR=$(echo "$CORE" | cut -d. -f2)
+          PATCH=$(echo "$CORE" | cut -d. -f3)
+          VERSION_CODE=$(( MAJOR * 10000 + MINOR * 100 + PATCH ))
+
+          echo "tag=$TAG"                       >> "$GITHUB_OUTPUT"
+          echo "version_name=$VERSION_NAME"     >> "$GITHUB_OUTPUT"
+          echo "version_code=$VERSION_CODE"     >> "$GITHUB_OUTPUT"
+          echo "Publicando $VERSION_NAME (code $VERSION_CODE)"
+
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Preparar entorno Android
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          echo "org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m" >> gradle.properties
+
+      # ---------------------------------------------------------------
+      #  Firma
+      # ---------------------------------------------------------------
+      # El keystore se guarda como base64 en un secret para que sobreviva
+      # al transporte por YAML. Si el secret no existe (repo recién creado),
+      # el workflow continúa y genera un APK SIN firmar: así el pipeline no
+      # se rompe antes de que el mantenedor configure la firma.
+      - name: Decodificar keystore
+        id: keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.VIDEOECRAFT_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::warning::No hay VIDEOECRAFT_KEYSTORE_BASE64. Se generará un APK sin firmar."
+            echo "signing=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/videoecraft.jks"
+          echo "signing=true" >> "$GITHUB_OUTPUT"
+          echo "Keystore decodificado"
+
+      # ---------------------------------------------------------------
+      #  Tests (bloqueantes)
+      # ---------------------------------------------------------------
+
+      - name: Ejecutar tests unitarios
+        run: ./gradlew :app:testDebugUnitTest --stacktrace
+
+      # ---------------------------------------------------------------
+      #  Build de release
+      # ---------------------------------------------------------------
+
+      - name: Compilar APK de release
+        env:
+          VIDEOECRAFT_KEYSTORE_PATH: ${{ steps.keystore.outputs.signing == 'true' && format('{0}/videoecraft.jks', runner.temp) || '' }}
+          VIDEOECRAFT_KEYSTORE_PASSWORD: ${{ secrets.VIDEOECRAFT_KEYSTORE_PASSWORD }}
+          VIDEOECRAFT_KEY_ALIAS: ${{ secrets.VIDEOECRAFT_KEY_ALIAS }}
+          VIDEOECRAFT_KEY_PASSWORD: ${{ secrets.VIDEOECRAFT_KEY_PASSWORD }}
+        run: |
+          ./gradlew :app:assembleRelease \
+            -PversionName="${{ steps.version.outputs.version_name }}" \
+            -PversionCode="${{ steps.version.outputs.version_code }}" \
+            --stacktrace
+
+      - name: Verificar el APK generado
+        id: apk
+        run: |
+          APK=$(find app/build/outputs/apk/release -name "*.apk" | head -n 1)
+          if [ -z "$APK" ]; then
+            echo "::error::No se generó ningún APK de release"
+            exit 1
+          fi
+          echo "APK encontrado: $APK ($(du -h "$APK" | cut -f1))"
+
+          # Nombre estable y descriptivo para la descarga.
+          FINAL="VideoEcraft-${{ steps.version.outputs.version_name }}.apk"
+          cp "$APK" "$FINAL"
+          echo "path=$FINAL" >> "$GITHUB_OUTPUT"
+          echo "name=$FINAL" >> "$GITHUB_OUTPUT"
+
+      # ---------------------------------------------------------------
+      #  Publicación de la Release
+      # ---------------------------------------------------------------
+
+      - name: Crear Release con el APK adjunto
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: VideoEcraft ${{ steps.version.outputs.version_name }}
+          files: ${{ steps.apk.outputs.path }}
+          draft: false
+          # Si el tag ya tenía una release (re-ejecución), se actualiza
+          # en lugar de fallar.
+          fail_on_unmatched_files: true
+          body: |
+            ## VideoEcraft ${{ steps.version.outputs.version_name }}
+
+            Editor de video para Android, **sin marca de agua** y con todo el
+            procesamiento en el dispositivo.
+
+            ### Instalación
+            1. Descarga `${{ steps.apk.outputs.name }}`
+            2. Permite "Instalar apps de origen desconocido" si Android lo pide
+            3. Abre el archivo e instala
+
+            > Requiere **Android 7.0 (API 24)** o superior.
+
+            ### Verificación de integridad
+            ```
+            ${{ steps.version.outputs.version_name }} · versionCode ${{ steps.version.outputs.version_code }}
+            ```
+
+            Para el changelog completo, consulta los commits desde el tag anterior.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---------------------------------------------------------------
+      #  Limpieza
+      # ---------------------------------------------------------------
+
+      - name: Borrar keystore temporal
+        if: always()
+        run: rm -f "$RUNNER_TEMP/videoecraft.jks"
+
+      - name: Resumen del job
+        if: always()
+        run: |
+          {
+            echo "## Release ${{ steps.version.outputs.tag }}"
+            echo ""
+            echo "| Campo | Valor |"
+            echo "|---|---|"
+            echo "| Versión | ${{ steps.version.outputs.version_name }} |"
+            echo "| versionCode | ${{ steps.version.outputs.version_code }} |"
+            echo "| APK | ${{ steps.apk.outputs.name }} |"
+            echo "| Firmado | ${{ steps.keystore.outputs.signing }} |"
+          } >> "$GITHUB_STEP_SUMMARY"

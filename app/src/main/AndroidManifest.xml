@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ============================================================= -->
+    <!--  PERMISOS                                                     -->
+    <!-- ============================================================= -->
+
+    <!-- Lectura del media local. El Photo Picker NO necesita permiso, pero el
+         navegador propio de archivos y las miniaturas de MediaStore sí. -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <!-- Android 14+: acceso granular ("Seleccionar fotos y videos") -->
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+
+    <!-- Escritura del video exportado en Movies/VideoEcraft (legacy API 24-28) -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <!-- Exportación larga en primer plano sin que el sistema mate el proceso -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROCESSING"
+        tools:targetApi="34" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Mantener la CPU viva durante la exportación -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- ============================================================= -->
+    <!--  HARDWARE                                                     -->
+    <!-- ============================================================= -->
+    <!-- OpenGL ES 3.0: requerido por los shaders de Chroma Key y efectos -->
+    <uses-feature
+        android:glEsVersion="0x00030000"
+        android:required="true" />
+
+    <!--
+        queries: Android 11+ debe declarar qué paquetes puede resolver.
+        Photo Picker y MediaStore funcionan sin esto; lo incluimos para
+        navegadores de archivos externos y apps de galería.
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT" />
+            <data android:mimeType="video/*" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.OPEN_DOCUMENT" />
+            <data android:mimeType="audio/*" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".VideoEcraftApp"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
+        android:fullBackupContent="@xml/backup_rules"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.VideoECraft"
+        tools:targetApi="34">
+
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:resizeableActivity="true"
+            android:theme="@style/Theme.VideoECraft.Splash"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Abrir VideoEcraft desde "Compartir con" un video -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+        </activity>
+
+        <!--
+            FileProvider para compartir archivos temporales del editor
+            (miniaturas cacheadas, audio importado, previsualizaciones).
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!--
+            Servicio de exportación en primer plano: Transformer puede tardar
+            minutos en 4K y el sistema no debe matar el proceso.
+        -->
+        <service
+            android:name=".export.ExportService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProcessing" />
+    </application>
+
+</manifest>

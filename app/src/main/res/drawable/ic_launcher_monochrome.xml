@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ============================================================
+    VideoEcraft — Icono adaptativo · Capa MONOCROMA (themed icons)
+    ============================================================
+    Versión de un solo color para Android 13+ (iconos temáticos).
+    Se usa una máscara alfa blanca: el sistema recolorea según el
+    fondo de pantalla del usuario.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Cubo isométrico sólido -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M54,26 L82,42 L82,68 L54,84 L26,68 L26,42 Z" />
+
+    <!-- Hueco interior del cubo (recorta el play invertido) -->
+    <path
+        android:fillColor="#FF000000"
+        android:fillType="evenOdd"
+        android:pathData="M54,26 L82,42 L82,68 L54,84 L26,68 L26,42 Z
+            M54,33 L74,44 L74,66 L54,77 L34,66 L34,44 Z" />
+
+    <!-- Triángulo de play -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M50,44 L68,54.5 L50,65 Z" />
+
+</vector>

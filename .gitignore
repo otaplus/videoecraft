@@ -1,0 +1,85 @@
+# =====================================================================
+#  VideoEcraft — .gitignore optimizado para Android Studio / Gradle / KSP
+# =====================================================================
+
+# ---------- Gradle ----------
+.gradle/
+build/
+app/build/
+captures/
+.gradletasknamecache
+gradle-app.setting
+
+# ---------- Android Studio / IntelliJ ----------
+.idea/*
+!.idea/codeStyles/
+!.idea/codeStyleSettings.xml
+!.idea/inspectionProfiles/
+local.properties
+*.iml
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/deploymentTargetSelector.xml
+.idea/gradle.xml
+.idea/misc.xml
+.fleet/
+*.hprof
+*.jks
+*.keystore
+!debug.keystore
+
+# ---------- NDK / C++ ----------
+.externalNativeBuild/
+.cxx/
+
+# ---------- Kotlin / KSP ----------
+.kotlin/
+# El esquema de Room SÍ se versiona (migraciones), pero no el código generado
+/app/build/generated/
+/app/build/kspCaches/
+
+# ---------- Build artifacts ----------
+*.apk
+*.aab
+*.aar
+*.ap_
+*.dex
+*.class
+*.log
+*.out
+release/
+output.json
+app/release/
+
+# ---------- Firma / secretos ----------
+# NUNCA subir el keystore de release: con él cualquiera podría publicar
+# actualizaciones suplantando la app.
+keys/
+keystore.properties
+secrets.properties
+
+# ---------- Capturas del editor (sandbox) ----------
+/thumbnails/
+/exports/
+/editor/
+
+# ---------- Sistema operativo ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+*~
+
+# ---------- Editores ----------
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+
+# ---------- Benchmarks / Perf ----------
+*.trace
+perf.data
+*.perfetto-trace

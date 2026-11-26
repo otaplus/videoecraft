@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Tema base: siempre oscuro ("Craft"), sin ActionBar y con barras transparentes -->
+    <style name="Base.Theme.VideoECraft" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/craft_void</item>
+        <item name="android:colorBackground">@color/craft_void</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
+    <style name="Theme.VideoECraft" parent="Base.Theme.VideoECraft" />
+
+    <!-- Tema de arranque: usa el splash API (Android 12+ y compat hacia atrás) -->
+    <style name="Theme.VideoECraft.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/craft_void</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/craft_void</item>
+        <item name="postSplashScreenTheme">@style/Theme.VideoECraft</item>
+    </style>
+
+</resources>

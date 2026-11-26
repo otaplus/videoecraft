@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ============================================================
+    VideoEcraft — Icono adaptativo · Capa de FONDO
+    ============================================================
+    Lienzo 108 x 108 dp (zona segura = círculo central de 72 dp).
+      · Fondo oscuro profundo "craft" (#101014).
+      · Halo radial cálido (Naranja Neón → Coral) desde la
+        esquina inferior derecha.
+      · Retícula de puntos muy sutil que evoca la mesa de trabajo.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 1. Fondo base oscuro -->
+    <path
+        android:fillColor="#101014"
+        android:pathData="M0,0h108v108h-108z" />
+
+    <!-- 2. Halo cálido diagonal -->
+    <path android:pathData="M0,0h108v108h-108z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="84"
+                android:centerY="88"
+                android:gradientRadius="98"
+                android:type="radial">
+                <item
+                    android:color="#00FF5722"
+                    android:offset="0.0" />
+                <item
+                    android:color="#33FF5722"
+                    android:offset="0.42" />
+                <item
+                    android:color="#00FF8A65"
+                    android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- 3. Retícula de puntos en las cuatro esquinas (fuera de la zona segura) -->
+    <path
+        android:fillColor="#FF8A65"
+        android:fillAlpha="0.20"
+        android:pathData="M18,18m-1.1,0a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0
+            M30,18m-1.1,0a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0
+            M18,30m-1.1,0a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0
+            M90,18m-1.1,0a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0
+            M78,18m-1.1,0a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0
+            M90,30m-1.1,0a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0
+            M18,90m-1.1,0a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0
+            M30,90m-1.1,0a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0
+            M18,78m-1.1,0a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0
+            M90,90m-1.1,0a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0
+            M78,90m-1.1,0a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0
+            M90,78m-1.1,0a1.1,1.1 0 1,0 2.2,0a1.1,1.1 0 1,0 -2.2,0" />
+
+</vector>

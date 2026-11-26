@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Miniaturas cacheadas de la timeline -->
+    <cache-path
+        name="thumbnails"
+        path="thumbnails/" />
+
+    <!-- Clips/audio importados y copiados al sandbox del editor -->
+    <files-path
+        name="editor_media"
+        path="editor/" />
+
+    <!-- Exportaciones temporales antes de publicarlas en MediaStore -->
+    <cache-path
+        name="exports"
+        path="exports/" />
+
+    <!-- Acceso genérico de sólo lectura al cache -->
+    <cache-path
+        name="cache"
+        path="." />
+
+    <!-- Almacenamiento externo privado de la app -->
+    <external-files-path
+        name="external_files"
+        path="." />
+</paths>
