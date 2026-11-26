@@ -1,0 +1,50 @@
+# =====================================================================
+#  Actualizaciones automáticas de dependencias
+# =====================================================================
+#  Dependabot abre PRs con las versiones nuevas. Las actions están
+#  fijadas por SHA en los workflows; este bloque las actualiza también,
+#  de modo que el pin no se quede obsoleto.
+# =====================================================================
+
+version: 2
+updates:
+  # ---------- GitHub Actions ----------
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "dependencies"
+      - "ci"
+
+  # ---------- Gradle (Android) ----------
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+    labels:
+      - "dependencies"
+    groups:
+      # Agrupa las actualizaciones menores para no inundar de PRs.
+      androidx:
+        patterns:
+          - "androidx.*"
+          - "com.google.android.material"
+        update-types:
+          - "minor"
+          - "patch"
+      kotlin:
+        patterns:
+          - "org.jetbrains.kotlin*"
+          - "com.google.devtools.ksp*"
+        update-types:
+          - "minor"
+          - "patch"
