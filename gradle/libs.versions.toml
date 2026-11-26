@@ -11,7 +11,7 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycle = "2.11.1"
 activityCompose = "1.13.0"
-composeBom = "2026.02.01"
+composeBom = "2026.11.01"
 coroutines = "1.11.0"
 # Media3 (ExoPlayer + Transformer + Effects)
 media3 = "1.11.1"
