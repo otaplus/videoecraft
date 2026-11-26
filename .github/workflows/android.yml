@@ -29,7 +29,7 @@ jobs:
           java-version: '17'
 
       - name: Configurar Gradle
-        uses: gradle/actions/setup-gradle@48b5f213c81028ace310571dc5ec0fbbca0b2947 # v4
+        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
 
       # Evita descargar NDK/CMake: la app no tiene código nativo.
       - name: Preparar entorno Android
@@ -75,7 +75,7 @@ jobs:
           java-version: '17'
 
       - name: Configurar Gradle
-        uses: gradle/actions/setup-gradle@48b5f213c81028ace310571dc5ec0fbbca0b2947 # v4
+        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
 
       - name: Preparar entorno Android
         run: echo "sdk.dir=$ANDROID_HOME" > local.properties
